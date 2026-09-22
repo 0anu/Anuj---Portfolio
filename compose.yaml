@@ -1,0 +1,18 @@
+services:
+  web:
+    build:
+      context: .
+      target: dev
+    volumes:
+      - ./:/workspace
+      - web_node_modules:/workspace/web/node_modules
+      - web_next_cache:/workspace/web/.next
+    ports:
+      - "3000:3000"
+    network_mode: bridge
+    working_dir: /workspace/web
+    # NODE_ENV is intentionally not set here — see Dockerfile.
+
+volumes:
+  web_node_modules:
+  web_next_cache:

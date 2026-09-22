@@ -1,0 +1,13 @@
+dist/
+.env.local
+
+# Next.js (web/ has its own .gitignore too, kept here for anything run from root)
+web/node_modules/
+web/.next/
+web/out/
+
+# Terraform
+infrastructure/.terraform/
+infrastructure/.build/
+infrastructure/*.tfstate
+infrastructure/*.tfstate.backup
