@@ -1,79 +1,52 @@
 import type { Metadata } from "next";
+import { labsManifest } from "@/lib/platform";
+import { Container, PageHeader } from "@/components/ui/section";
+import { StatusBadge } from "@/components/ui/badge";
 
-export const metadata: Metadata = { title: "Labs" };
-
-interface ManifestEntry {
-  version: string;
-  feature: string;
-  detail: string;
-}
-
-const manifest: ManifestEntry[] = [
-  {
-    version: "V4",
-    feature: "AI Labs backend",
-    detail: "FastAPI service + a standalone agents/ package, no web-framework imports inside it.",
-  },
-  {
-    version: "V5",
-    feature: "RAG over this site",
-    detail: "Retrieval-augmented generation indexed against the site's own MDX content.",
-  },
-  {
-    version: "V6",
-    feature: "Multi-agent workflows",
-    detail: "Interactive, stateful multi-agent demos built on the same agents package.",
-  },
-  {
-    version: "V7",
-    feature: "Auth / admin",
-    detail: "Authenticated surface for managing labs and content.",
-  },
-];
+export const metadata: Metadata = {
+  title: "Labs",
+  description:
+    "Interactive AI labs — RAG over this site, multi-agent workflows — built beside the static site as API calls.",
+  alternates: { canonical: "/labs" },
+};
 
 export default function LabsPage() {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-20">
-      <header className="mb-16 max-w-2xl">
-        <p className="font-mono text-label uppercase tracking-[0.1em] text-accent-text">Labs</p>
-        <h1 className="mt-4 text-h1 text-fg-strong">Manifest</h1>
-        <p className="mt-4 text-body-lg text-fg-muted">
-          Interactive AI labs are added beside the static site as API calls — the site itself stays
-          static. Nothing here is live yet.
-        </p>
-      </header>
+    <>
+      <PageHeader
+        eyebrow="Labs"
+        title="AI experiments, in the open"
+        description="Interactive AI labs are added beside the static site as API calls — the site itself stays static. This manifest tracks what's planned. Nothing here is live yet."
+      />
 
-      <div className="overflow-x-auto rounded-md border border-border font-mono">
-        <table className="w-full min-w-[640px] border-collapse text-left">
-          <thead>
-            <tr className="border-b border-border bg-bg-subtle text-label uppercase tracking-[0.08em] text-fg-subtle">
-              <th className="px-4 py-3">Version</th>
-              <th className="px-4 py-3">Feature</th>
-              <th className="px-4 py-3">Detail</th>
-              <th className="px-4 py-3 text-right">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {manifest.map((entry, i) => (
-              <tr
-                key={entry.version}
-                className={`border-t border-border ${i % 2 === 1 ? "bg-bg-subtle/40" : ""}`}
-              >
-                <td className="px-4 py-3 text-caption text-fg-strong">{entry.version}</td>
-                <td className="whitespace-nowrap px-4 py-3 text-caption text-fg">
-                  {entry.feature}
-                </td>
-                <td className="px-4 py-3 text-caption text-fg-muted">{entry.detail}</td>
-                <td className="px-4 py-3 text-right">
-                  <span className="inline-block rounded border border-border-strong px-2 py-0.5 text-label uppercase tracking-[0.08em] text-fg-subtle">
-                    Planned
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <Container className="py-14 md:py-20">
+        <ol className="relative space-y-4 md:space-y-5">
+          <span
+            aria-hidden="true"
+            className="absolute top-6 bottom-6 left-[1.6rem] w-px bg-[linear-gradient(var(--accent),var(--accent-2),transparent)] opacity-40 md:left-[2.1rem]"
+          />
+          {labsManifest.map((entry) => (
+            <li key={entry.version} className="reveal relative flex gap-4 md:gap-6">
+              <span className="relative z-10 flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-2xl border border-border-strong bg-bg-deep font-mono text-caption text-accent-text md:h-[4.25rem] md:w-[4.25rem] md:text-body">
+                {entry.version}
+              </span>
+              <div className="card flex flex-1 flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between md:p-6">
+                <div>
+                  <h2 className="text-h4 text-fg-strong">{entry.feature}</h2>
+                  <p className="mt-1.5 text-caption text-fg-muted">{entry.detail}</p>
+                </div>
+                <StatusBadge status={entry.status} className="self-start sm:self-center" />
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <p className="mt-12 max-w-2xl font-mono text-caption text-fg-subtle">
+          Architecture: a standalone <span className="text-fg">agents/</span> Python package with no
+          web-framework imports, served by a small FastAPI backend. The public site never becomes
+          dynamic — labs are API calls from static pages.
+        </p>
+      </Container>
+    </>
   );
 }

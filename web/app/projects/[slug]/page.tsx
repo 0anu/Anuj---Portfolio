@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAllProjects, getProjectBySlug } from "@/lib/projects";
+import { getAllProjects, getProjectBySlug, getProjectHue } from "@/lib/projects";
+import { Container } from "@/components/ui/section";
+import { ChipList } from "@/components/ui/badge";
+import { ArrowLeft, ArrowRight } from "@/components/ui/icons";
 import { PipelineDiagram } from "@/components/pipeline-diagram";
 import { CaseStudyNote } from "@/components/case-study-note";
+import { ProjectLinks } from "@/components/project-card";
 
 export function generateStaticParams() {
   return getAllProjects().map((project) => ({ slug: project.slug }));
@@ -17,7 +22,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) return {};
-  return { title: project.title, description: project.summary };
+  return {
+    title: project.title,
+    description: project.summary,
+    alternates: { canonical: `/projects/${project.slug}` },
+    openGraph: { title: project.title, description: project.summary, type: "article" },
+  };
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -27,103 +37,157 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   if (!project) notFound();
 
   const index = projects.findIndex((p) => p.slug === project.slug);
+  const prev = projects[(index - 1 + projects.length) % projects.length]!;
   const next = projects[(index + 1) % projects.length]!;
+  const tone = { "--tone-h": getProjectHue(project) } as CSSProperties;
+
+  const spec = [
+    { label: "Domain", value: project.domain },
+    { label: "Stack", value: `${project.stack.length} technologies` },
+    { label: "Pipeline", value: `${project.architecture.length} steps` },
+    { label: "Status", value: project.status },
+  ];
 
   return (
-    <>
-      <article className="mx-auto max-w-6xl px-6 py-20">
-        <header className="max-w-3xl">
-          <Link href="/projects" className="text-caption text-fg-subtle hover:text-fg-muted">
-            ← All projects
+    <article style={tone}>
+      {/* Header */}
+      <header className="relative overflow-hidden border-b border-border">
+        <div className="backdrop-grid absolute inset-0" aria-hidden="true" />
+        <div className="tone-glow absolute inset-0 opacity-80" aria-hidden="true" />
+        <Container className="relative pt-10 pb-14 md:pt-14 md:pb-20">
+          <Link
+            href="/projects"
+            className="group inline-flex items-center gap-1.5 text-caption text-fg-muted transition-colors hover:text-fg-strong"
+          >
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+            All projects
           </Link>
-          <p className="mt-6 font-mono text-label uppercase tracking-[0.1em] text-accent-text">
+          <p className="tone-text mt-10 animate-rise font-mono text-label uppercase tracking-[0.14em]">
             {project.domain}
           </p>
-          <h1 className="mt-3 text-h1 text-fg-strong">{project.title}</h1>
-          <p className="mt-5 text-body-lg text-fg-muted">{project.summary}</p>
-        </header>
+          <h1 className="mt-4 max-w-4xl animate-rise text-h1 text-fg-strong [animation-delay:60ms]">
+            {project.title}
+          </h1>
+          <p className="mt-5 max-w-3xl animate-rise text-body-lg text-fg-muted [animation-delay:120ms]">
+            {project.summary}
+          </p>
+          <div className="mt-7 flex animate-rise flex-wrap items-center gap-x-6 gap-y-4 [animation-delay:180ms]">
+            <ChipList items={project.stack} />
+            {project.links.length > 0 ? (
+              <div className="flex gap-4">
+                <ProjectLinks project={project} />
+              </div>
+            ) : null}
+          </div>
 
-        {/* Spec bar — hairline cells, mono */}
-        <div className="mt-10 grid grid-cols-2 border border-border md:grid-cols-4">
-          <div className="border-b border-r border-border p-4 md:border-b-0">
-            <div className="font-mono text-label uppercase tracking-[0.08em] text-fg-subtle">
-              Domain
-            </div>
-            <div className="mt-1 text-caption text-fg">{project.domain}</div>
-          </div>
-          <div className="border-b border-border p-4 md:border-b-0 md:border-r">
-            <div className="font-mono text-label uppercase tracking-[0.08em] text-fg-subtle">
-              Stack
-            </div>
-            <div className="mt-1 text-caption text-fg">{project.stack.join(", ")}</div>
-          </div>
-          <div className="border-r border-border p-4">
-            <div className="font-mono text-label uppercase tracking-[0.08em] text-fg-subtle">
-              Steps
-            </div>
-            <div className="mt-1 text-caption text-fg tabular-nums">
-              {project.architecture.length}
-            </div>
-          </div>
-          <div className="p-4">
-            <div className="font-mono text-label uppercase tracking-[0.08em] text-fg-subtle">
-              Status
-            </div>
-            <div className="mt-1 text-caption text-fg">Case study in progress</div>
-          </div>
-        </div>
+          <dl className="mt-12 grid animate-rise grid-cols-2 overflow-hidden rounded-2xl border border-border bg-[oklch(15.5%_0.016_262/70%)] backdrop-blur md:grid-cols-4 [animation-delay:240ms]">
+            {spec.map((item, i) => (
+              <div
+                key={item.label}
+                className={`p-4 md:p-5 ${i % 2 === 0 ? "border-r" : ""} ${i < 2 ? "border-b md:border-b-0" : ""} ${
+                  i === 1 ? "md:border-r" : ""
+                } border-border`}
+              >
+                <dt className="font-mono text-label uppercase tracking-[0.12em] text-fg-subtle">
+                  {item.label}
+                </dt>
+                <dd className="mt-1.5 text-caption text-fg-strong">{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Container>
+      </header>
 
-        <div className="mt-14">
-          <h2 className="mb-5 text-h3 text-fg-strong">Architecture</h2>
-          {project.architectureFlows ? (
-            <div className="space-y-5">
-              {project.architectureFlows.map((flow) => (
-                <PipelineDiagram key={flow.label} steps={flow.steps} label={flow.label} />
-              ))}
-            </div>
-          ) : (
-            <PipelineDiagram steps={project.architecture} />
-          )}
-        </div>
+      <Container className="py-16 md:py-24">
+        {/* Problem */}
+        <section
+          aria-labelledby="problem-title"
+          className="reveal grid gap-6 md:grid-cols-[14rem_1fr] md:gap-12"
+        >
+          <h2
+            id="problem-title"
+            className="font-mono text-label uppercase tracking-[0.14em] text-fg-subtle md:pt-2"
+          >
+            The problem
+          </h2>
+          <p className="max-w-3xl text-h3 font-medium text-fg-strong">{project.problem}</p>
+        </section>
 
-        <div className="mt-14 grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,68ch)_1fr]">
-          <div className="space-y-5 text-body-lg text-fg">
-            <p>{project.summary}</p>
-            <CaseStudyNote />
-          </div>
-          <aside>
-            <h3 className="mb-4 font-mono text-label uppercase tracking-[0.08em] text-fg-subtle">
-              Engineering concerns
-            </h3>
-            <ul className="space-y-4">
-              {project.concerns.map((concern) => (
-                <li key={concern} className="text-caption text-fg-muted">
-                  {concern}
-                </li>
-              ))}
-            </ul>
-          </aside>
-        </div>
-      </article>
+        <div className="divider-fade my-14 md:my-20" />
 
-      <Link
-        href={`/projects/${next.slug}`}
-        className="group block border-t border-border bg-bg-subtle transition-colors hover:bg-surface"
-      >
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-14">
-          <div>
-            <p className="font-mono text-label uppercase tracking-[0.08em] text-fg-subtle">
-              Next project
-            </p>
-            <h2 className="mt-2 text-h1 text-fg-strong transition-colors group-hover:text-accent-text">
-              {next.title}
+        {/* Architecture */}
+        <section aria-labelledby="architecture-title" className="reveal">
+          <div className="grid gap-6 md:grid-cols-[14rem_1fr] md:gap-12">
+            <h2
+              id="architecture-title"
+              className="font-mono text-label uppercase tracking-[0.14em] text-fg-subtle md:pt-2"
+            >
+              Architecture
             </h2>
+            <div className="space-y-4">
+              {project.architectureFlows ? (
+                project.architectureFlows.map((flow) => (
+                  <PipelineDiagram key={flow.label} steps={flow.steps} label={flow.label} />
+                ))
+              ) : (
+                <PipelineDiagram steps={project.architecture} />
+              )}
+            </div>
           </div>
-          <span aria-hidden="true" className="shrink-0 text-2xl text-fg-subtle">
-            →
-          </span>
-        </div>
-      </Link>
-    </>
+        </section>
+
+        <div className="divider-fade my-14 md:my-20" />
+
+        {/* Engineering concerns */}
+        <section aria-labelledby="concerns-title" className="reveal">
+          <div className="grid gap-6 md:grid-cols-[14rem_1fr] md:gap-12">
+            <h2
+              id="concerns-title"
+              className="font-mono text-label uppercase tracking-[0.14em] text-fg-subtle md:pt-2"
+            >
+              Engineering concerns
+            </h2>
+            <div>
+              <ol className="grid gap-4 lg:grid-cols-3">
+                {project.concerns.map((concern, i) => (
+                  <li key={concern} className="card p-5">
+                    <span className="tone-text font-mono text-label tabular-nums">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <p className="mt-3 text-caption text-fg">{concern}</p>
+                  </li>
+                ))}
+              </ol>
+              <div className="mt-6">
+                <CaseStudyNote />
+              </div>
+            </div>
+          </div>
+        </section>
+      </Container>
+
+      {/* Prev / next */}
+      <nav aria-label="More projects" className="border-t border-border bg-bg">
+        <Container className="grid gap-4 py-10 md:grid-cols-2 md:py-14">
+          <Link href={`/projects/${prev.slug}`} className="card card-interactive group p-6">
+            <span className="inline-flex items-center gap-1.5 font-mono text-label uppercase tracking-[0.12em] text-fg-subtle">
+              <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
+              Previous
+            </span>
+            <span className="mt-2 block text-h3 text-fg-strong">{prev.title}</span>
+          </Link>
+          <Link
+            href={`/projects/${next.slug}`}
+            className="card card-interactive group p-6 md:text-right"
+          >
+            <span className="inline-flex items-center gap-1.5 font-mono text-label uppercase tracking-[0.12em] text-fg-subtle">
+              Next
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            </span>
+            <span className="mt-2 block text-h3 text-fg-strong">{next.title}</span>
+          </Link>
+        </Container>
+      </nav>
+    </article>
   );
 }

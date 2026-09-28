@@ -1,43 +1,51 @@
-function Arrow() {
-  return (
-    <svg
-      viewBox="0 0 16 16"
-      className="h-4 w-4 shrink-0 text-fg-subtle"
-      aria-hidden="true"
-      fill="none"
-    >
-      <path
-        d="M2 8h11M9 4l4 4-4 4"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+import { ArrowRight } from "@/components/ui/icons";
 
+/**
+ * Architecture diagram as real DOM (an ordered list), not Mermaid: static
+ * content shouldn't ship a diagram runtime. Stacks vertically on small
+ * screens and wraps horizontally from md up.
+ */
 export function PipelineDiagram({ steps, label }: { steps: string[]; label?: string }) {
   return (
-    <div className="rounded-md border border-border bg-bg-subtle p-5 md:p-6">
+    <figure className="card relative overflow-hidden p-5 md:p-7">
+      <div className="backdrop-grid absolute inset-0 opacity-50" aria-hidden="true" />
       {label ? (
-        <div className="mb-4 font-mono text-label uppercase tracking-[0.08em] text-fg-subtle">
+        <figcaption className="relative mb-5 flex items-center gap-2 font-mono text-label uppercase tracking-[0.12em] text-fg-subtle">
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
           {label}
-        </div>
+        </figcaption>
       ) : null}
-      <ol className="flex flex-wrap items-center gap-x-2 gap-y-3">
-        {steps.map((step, index) => (
-          <li key={step} className="flex items-center gap-2">
-            <div className="flex items-center gap-2 rounded border border-border-strong bg-surface px-3 py-2 surface-lift">
-              <span className="font-mono text-label text-fg-subtle tabular-nums">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <span className="text-caption text-fg">{step}</span>
-            </div>
-            {index < steps.length - 1 ? <Arrow /> : null}
-          </li>
-        ))}
+      <ol className="relative flex flex-col gap-0 md:flex-row md:flex-wrap md:items-center md:gap-y-4">
+        {steps.map((step, index) => {
+          const last = index === steps.length - 1;
+          return (
+            <li key={`${step}-${index}`} className="flex flex-col md:flex-row md:items-center">
+              <div
+                className={`flex items-center gap-3 rounded-xl border bg-surface px-3.5 py-2.5 shadow-[0_1px_0_0_oklch(100%_0_0/5%)_inset] ${
+                  last ? "border-[oklch(83%_0.13_200/45%)]" : "border-border-strong"
+                }`}
+              >
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-bg-subtle font-mono text-label text-fg-subtle tabular-nums">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="text-caption text-fg-strong">{step}</span>
+              </div>
+              {!last ? (
+                <>
+                  <span
+                    aria-hidden="true"
+                    className="ml-[1.6rem] h-4 w-px bg-border-strong md:hidden"
+                  />
+                  <ArrowRight
+                    aria-hidden="true"
+                    className="mx-2 hidden h-4 w-4 shrink-0 text-fg-subtle md:block"
+                  />
+                </>
+              ) : null}
+            </li>
+          );
+        })}
       </ol>
-    </div>
+    </figure>
   );
 }

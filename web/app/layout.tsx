@@ -1,53 +1,84 @@
-import type { Metadata } from "next";
-import { Instrument_Sans, Source_Serif_4, JetBrains_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { person, siteUrl } from "@/lib/site";
 import "./globals.css";
 
-const instrumentSans = Instrument_Sans({
+const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-instrument-sans",
+  variable: "--font-geist",
   display: "swap",
 });
 
-const sourceSerif = Source_Serif_4({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  variable: "--font-source-serif",
+  variable: "--font-geist-mono",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+/** Used sparingly: one italic accent phrase per page heading at most. */
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  weight: "400",
+  style: "italic",
+  variable: "--font-instrument-serif",
   display: "swap",
 });
+
+const title = `${person.name} — ${person.role}`;
+const description = `${person.name}, ${person.role}. Event-driven data pipelines, cloud data platforms, reverse ETL, and agentic AI systems.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${person.name} — ${person.role}`,
+    default: title,
     template: `%s — ${person.name}`,
   },
-  description: `${person.name}, ${person.role}. Data engineering pipelines, reverse ETL, and agentic AI systems.`,
+  description,
+  keywords: [
+    "Data Engineer",
+    "AI Engineer",
+    "Agentic AI",
+    "LangGraph",
+    "Data pipelines",
+    "AWS",
+    "GCP",
+    "Reverse ETL",
+  ],
+  authors: [{ name: person.name, url: siteUrl }],
+  creator: person.name,
   openGraph: {
-    title: `${person.name} — ${person.role}`,
-    description: `${person.name}, ${person.role}. Data engineering pipelines, reverse ETL, and agentic AI systems.`,
+    title,
+    description,
     url: siteUrl,
     siteName: person.name,
     type: "website",
+    locale: "en_US",
   },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0b0e14",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${instrumentSans.variable} ${sourceSerif.variable} ${jetbrainsMono.variable}`}
+      className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
     >
-      <body className="min-h-screen antialiased">
+      <body className="flex min-h-screen flex-col antialiased">
         <Nav />
-        <main>{children}</main>
+        <main id="main" className="flex-1">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>
