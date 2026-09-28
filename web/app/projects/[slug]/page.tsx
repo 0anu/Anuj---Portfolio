@@ -98,73 +98,75 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </Container>
       </header>
 
-      <Container className="py-16 md:py-24">
-        {/* Problem */}
-        <section
-          aria-labelledby="problem-title"
-          className="reveal grid gap-6 md:grid-cols-[14rem_1fr] md:gap-12"
-        >
-          <h2
-            id="problem-title"
-            className="font-mono text-label uppercase tracking-[0.14em] text-fg-subtle md:pt-2"
+      <div className="panel-inverse sheet my-4 sm:my-6">
+        <Container className="py-16 md:py-24">
+          {/* Problem */}
+          <section
+            aria-labelledby="problem-title"
+            className="reveal grid gap-6 md:grid-cols-[14rem_1fr] md:gap-12"
           >
-            The problem
-          </h2>
-          <p className="max-w-3xl text-h3 font-medium text-fg-strong">{project.problem}</p>
-        </section>
-
-        <div className="divider-fade my-14 md:my-20" />
-
-        {/* Architecture */}
-        <section aria-labelledby="architecture-title" className="reveal">
-          <div className="grid gap-6 md:grid-cols-[14rem_1fr] md:gap-12">
             <h2
-              id="architecture-title"
+              id="problem-title"
               className="font-mono text-label uppercase tracking-[0.14em] text-fg-subtle md:pt-2"
             >
-              Architecture
+              The problem
             </h2>
-            <div className="space-y-4">
-              {project.architectureFlows ? (
-                project.architectureFlows.map((flow) => (
-                  <PipelineDiagram key={flow.label} steps={flow.steps} label={flow.label} />
-                ))
-              ) : (
-                <PipelineDiagram steps={project.architecture} />
-              )}
-            </div>
-          </div>
-        </section>
+            <p className="max-w-3xl text-h3 font-medium text-fg-strong">{project.problem}</p>
+          </section>
 
-        <div className="divider-fade my-14 md:my-20" />
+          <div className="divider-fade my-14 md:my-20" />
 
-        {/* Engineering concerns */}
-        <section aria-labelledby="concerns-title" className="reveal">
-          <div className="grid gap-6 md:grid-cols-[14rem_1fr] md:gap-12">
-            <h2
-              id="concerns-title"
-              className="font-mono text-label uppercase tracking-[0.14em] text-fg-subtle md:pt-2"
-            >
-              Engineering concerns
-            </h2>
-            <div>
-              <ol className="grid gap-4 lg:grid-cols-3">
-                {project.concerns.map((concern, i) => (
-                  <li key={concern} className="card p-5">
-                    <span className="tone-text font-mono text-label tabular-nums">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <p className="mt-3 text-caption text-fg">{concern}</p>
-                  </li>
-                ))}
-              </ol>
-              <div className="mt-6">
-                <CaseStudyNote />
+          {/* Architecture */}
+          <section aria-labelledby="architecture-title" className="reveal">
+            <div className="grid gap-6 md:grid-cols-[14rem_1fr] md:gap-12">
+              <h2
+                id="architecture-title"
+                className="font-mono text-label uppercase tracking-[0.14em] text-fg-subtle md:pt-2"
+              >
+                Architecture
+              </h2>
+              <div className="space-y-4">
+                {project.architectureFlows ? (
+                  project.architectureFlows.map((flow) => (
+                    <PipelineDiagram key={flow.label} steps={flow.steps} label={flow.label} />
+                  ))
+                ) : (
+                  <PipelineDiagram steps={project.architecture} />
+                )}
               </div>
             </div>
-          </div>
-        </section>
-      </Container>
+          </section>
+
+          <div className="divider-fade my-14 md:my-20" />
+
+          {/* Engineering concerns */}
+          <section aria-labelledby="concerns-title" className="reveal">
+            <div className="grid gap-6 md:grid-cols-[14rem_1fr] md:gap-12">
+              <h2
+                id="concerns-title"
+                className="font-mono text-label uppercase tracking-[0.14em] text-fg-subtle md:pt-2"
+              >
+                Engineering concerns
+              </h2>
+              <div>
+                <ol className="grid gap-4 lg:grid-cols-3">
+                  {project.concerns.map((concern, i) => (
+                    <li key={concern} className="card p-5">
+                      <span className="tone-text font-mono text-label tabular-nums">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <p className="mt-3 text-caption text-fg">{concern}</p>
+                    </li>
+                  ))}
+                </ol>
+                <div className="mt-6">
+                  <CaseStudyNote />
+                </div>
+              </div>
+            </div>
+          </section>
+        </Container>
+      </div>
 
       {/* Prev / next */}
       <nav aria-label="More projects" className="border-t border-border bg-bg">

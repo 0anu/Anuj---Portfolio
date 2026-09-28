@@ -46,7 +46,7 @@ export function ProjectGrid({
               className={`inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-caption transition-colors ${
                 selected
                   ? "border-transparent bg-fg-strong text-bg-deep"
-                  : "border-border-strong text-fg-muted hover:border-[oklch(100%_0_0/28%)] hover:text-fg-strong"
+                  : "border-border-strong text-fg-muted hover:border-tint-border hover:text-fg-strong"
               }`}
             >
               {category}

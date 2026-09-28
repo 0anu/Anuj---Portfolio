@@ -27,7 +27,7 @@ export default function ExperiencePage() {
 
       <section
         aria-labelledby="focus-title"
-        className="border-t border-border bg-bg py-16 md:py-24"
+        className="panel-inverse sheet my-4 py-16 sm:my-6 md:py-24"
       >
         <Container>
           <SectionHeader

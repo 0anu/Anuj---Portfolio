@@ -8,7 +8,7 @@ type Status = "idle" | "submitting" | "success" | "error";
 const endpoint = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT;
 
 const fieldClasses =
-  "mt-2 w-full rounded-xl border border-border-strong bg-bg-subtle px-4 py-3 text-body text-fg-strong placeholder:text-fg-subtle outline-none transition-[border-color,box-shadow] duration-200 hover:border-[oklch(100%_0_0/24%)] focus:border-accent focus:shadow-[0_0_0_4px_oklch(83%_0.13_200/15%)]";
+  "mt-2 w-full rounded-xl border border-border-strong bg-bg-subtle px-4 py-3 text-body text-fg-strong placeholder:text-fg-subtle outline-none transition-[border-color,box-shadow] duration-200 hover:border-tint-border focus:border-accent focus:shadow-[0_0_0_4px_oklch(83%_0.13_200/15%)]";
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");

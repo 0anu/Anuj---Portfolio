@@ -13,7 +13,7 @@
   --bg-subtle: oklch(18.5% 0.018 262);
   --surface: oklch(20.5% 0.019 262);
   --surface-raised: oklch(25% 0.021 262);
-  --surface-inverse: oklch(96.5% 0.004 262);
+  --surface-inverse: oklch(97.5% 0.007 270);
 
   /* Foreground — on dark surfaces */
   --fg-strong: oklch(98.5% 0.003 262);
@@ -50,6 +50,13 @@
   --surface-lift: oklch(100% 0 0 / 6%);
   --grain-opacity: 0.035;
 
+  /* Theme-aware overlays — flip to dark-on-light inside .panel-inverse */
+  --tint: oklch(100% 0 0 / 4%);
+  --tint-strong: oklch(100% 0 0 / 8%);
+  --tint-border: oklch(100% 0 0 / 28%);
+  --grid-line: oklch(100% 0 0 / 5%);
+  --card-sheen: oklch(100% 0 0 / 2.5%);
+
   /* Elevation */
   --shadow-card: 0 1px 0 0 oklch(100% 0 0 / 4%) inset, 0 1px 2px oklch(0% 0 0 / 30%);
   --shadow-lift:
@@ -63,6 +70,10 @@
   --dur: 280ms;
 
   --header-h: 4rem;
+
+  /* Lightness/chroma for per-item tone text (see .tone-text) */
+  --tone-l: 84%;
+  --tone-c: 0.11;
 }
 
 /* ------------------------------------------------------------------ */
@@ -71,10 +82,10 @@
 /* so cards/buttons/prose/forms inside become correct automatically.  */
 /* ------------------------------------------------------------------ */
 .panel-inverse {
-  --bg-deep: oklch(93% 0.006 262);
+  --bg-deep: oklch(94.5% 0.009 270);
   --bg: var(--surface-inverse);
-  --bg-subtle: oklch(94% 0.005 262);
-  --surface: oklch(99% 0.002 262);
+  --bg-subtle: oklch(95.5% 0.008 270);
+  --surface: oklch(100% 0 0);
   --surface-raised: oklch(100% 0 0);
   /* --surface-inverse intentionally not redefined here: it's the "light
      panel" token, and --bg above still needs *its* (unredefined, light)
@@ -87,11 +98,23 @@
   --fg-subtle: oklch(53% 0.016 262);
 
   --accent-text: var(--accent-on-inverse);
+  --accent-2-text: oklch(49% 0.19 292);
   /* --accent-contrast intentionally not redefined: --accent itself keeps the
      same lightness in both contexts, so the dark text that reads on it does too. */
 
-  --border: oklch(70% 0.012 262 / 60%);
-  --border-strong: oklch(55% 0.016 262 / 55%);
+  --border: oklch(89% 0.012 270);
+  --border-strong: oklch(81% 0.016 270);
+
+  --tint: oklch(25% 0.03 270 / 4%);
+  --tint-strong: oklch(25% 0.03 270 / 7%);
+  --tint-border: oklch(25% 0.03 270 / 28%);
+  --grid-line: oklch(40% 0.04 270 / 7%);
+  --card-sheen: transparent;
+  --tone-l: 47%;
+  --tone-c: 0.14;
+
+  --shadow-card: 0 1px 2px oklch(30% 0.04 270 / 6%), 0 8px 24px -12px oklch(30% 0.05 270 / 14%);
+  --shadow-lift: 0 2px 4px oklch(30% 0.04 270 / 6%), 0 28px 56px -24px oklch(35% 0.08 270 / 30%);
 
   --success: var(--success-on-inverse);
   --warning: var(--warning-on-inverse);
@@ -100,8 +123,7 @@
 
   --surface-lift: oklch(0% 0 0 / 4%);
 
-  background: var(--bg);
-  color: var(--fg);
+  color-scheme: light;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -130,6 +152,10 @@
 
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
+
+  --color-tint: var(--tint);
+  --color-tint-strong: var(--tint-strong);
+  --color-tint-border: var(--tint-border);
 
   --color-success: var(--success);
   --color-warning: var(--warning);
@@ -236,6 +262,12 @@
   }
 }
 
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @keyframes gradient-pan {
   to {
     background-position: 200% center;
@@ -312,6 +344,12 @@
 }
 
 @layer components {
+  /* Layered (unlike the token block above) so .sheet can override it */
+  .panel-inverse {
+    background: var(--bg);
+    color: var(--fg);
+  }
+
   /* Eyebrow label above headings */
   .eyebrow {
     display: inline-flex;
@@ -335,7 +373,7 @@
     position: relative;
     border: 1px solid var(--border);
     border-radius: 1rem;
-    background: linear-gradient(180deg, oklch(100% 0 0 / 2.5%), transparent 40%), var(--surface);
+    background: linear-gradient(180deg, var(--card-sheen), transparent 40%), var(--surface);
     box-shadow: var(--shadow-card);
   }
 
@@ -384,7 +422,7 @@
 
   /* Glassy chrome for sticky header and floating panels */
   .glass {
-    background: oklch(13% 0.014 262 / 72%);
+    background: oklch(13% 0.014 262 / 88%);
     -webkit-backdrop-filter: blur(16px) saturate(1.4);
     backdrop-filter: blur(16px) saturate(1.4);
   }
@@ -396,7 +434,7 @@
     gap: 0.375rem;
     border: 1px solid var(--border);
     border-radius: 999px;
-    background: oklch(100% 0 0 / 3%);
+    background: var(--tint);
     padding: 0.25rem 0.625rem;
     font-family: var(--font-mono);
     font-size: var(--text-label);
@@ -427,8 +465,8 @@
   /* Page-level ambient backdrop: grid fading out + two soft blooms */
   .backdrop-grid {
     background-image:
-      linear-gradient(to right, oklch(100% 0 0 / 5%) 1px, transparent 1px),
-      linear-gradient(to bottom, oklch(100% 0 0 / 5%) 1px, transparent 1px);
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
     background-size: 64px 64px;
     -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 10%, transparent 75%);
     mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 10%, transparent 75%);
@@ -443,6 +481,66 @@
     .bloom {
       animation: drift 18s ease-in-out infinite;
     }
+  }
+
+  /*
+   * Light "sheet": a rounded light panel set into the dark page. Pairs with
+   * .panel-inverse (which flips every token inside it) and carries a soft
+   * pastel mesh so light sections read as colourful, not flat white.
+   */
+  .sheet {
+    position: relative;
+    isolation: isolate;
+    /* clip, not hidden: hidden would make this a scroll container and break
+       position: sticky on anything inside (e.g. the About page aside). */
+    overflow: clip;
+    margin-inline: 0.5rem;
+    border-radius: 1.75rem;
+    background:
+      radial-gradient(ellipse 45% 55% at 0% 0%, oklch(90% 0.07 200 / 70%), transparent 70%),
+      radial-gradient(ellipse 40% 50% at 100% 10%, oklch(90% 0.07 292 / 65%), transparent 70%),
+      radial-gradient(ellipse 50% 45% at 85% 100%, oklch(93% 0.06 75 / 60%), transparent 70%),
+      var(--bg);
+    box-shadow: 0 40px 120px -60px oklch(70% 0.12 240 / 45%);
+  }
+  @media (min-width: 640px) {
+    .sheet {
+      margin-inline: 1rem;
+      border-radius: 2.5rem;
+    }
+  }
+
+  /* Icon tile tinted by --tone-h; works on dark and light */
+  .icon-tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.875rem;
+    color: oklch(var(--tone-l) var(--tone-c) var(--tone-h, 200));
+    background: linear-gradient(
+      135deg,
+      oklch(80% 0.14 var(--tone-h, 200) / 22%),
+      oklch(80% 0.14 calc(var(--tone-h, 200) + 40) / 10%)
+    );
+    box-shadow: inset 0 0 0 1px oklch(75% 0.13 var(--tone-h, 200) / 30%);
+  }
+
+  /* Infinite horizontal strip; content is duplicated once in the markup */
+  .marquee {
+    display: flex;
+    width: max-content;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .marquee {
+      animation: marquee 45s linear infinite;
+    }
+    .marquee:hover {
+      animation-play-state: paused;
+    }
+  }
+  .marquee-mask {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
   }
 
   .divider-fade {
@@ -462,7 +560,7 @@
 
   /* Per-item accent hue, set via style={{ "--tone-h": 290 }} */
   .tone-text {
-    color: oklch(84% 0.11 var(--tone-h, 200));
+    color: oklch(var(--tone-l) var(--tone-c) var(--tone-h, 200));
   }
   .tone-bg {
     background-color: oklch(83% 0.13 var(--tone-h, 200) / 12%);

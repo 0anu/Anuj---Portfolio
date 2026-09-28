@@ -31,7 +31,7 @@ export default function TutorialsPage() {
                     className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,oklch(70%_0.17_292/16%),transparent_65%)]"
                     aria-hidden="true"
                   />
-                  <span className="relative flex h-14 w-14 items-center justify-center rounded-full border border-border-strong bg-[oklch(100%_0_0/6%)] text-[1.25rem] text-fg-strong backdrop-blur transition-transform duration-300 group-hover:scale-110">
+                  <span className="relative flex h-14 w-14 items-center justify-center rounded-full border border-border-strong bg-tint-strong text-[1.25rem] text-fg-strong backdrop-blur transition-transform duration-300 group-hover:scale-110">
                     <Play className="translate-x-px" />
                   </span>
                   <span className="absolute top-3 left-3 font-mono text-label text-fg-subtle tabular-nums">
