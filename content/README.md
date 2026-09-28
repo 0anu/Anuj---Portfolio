@@ -6,4 +6,6 @@ this lives at the repo root rather than under `web/`.
 
 V1 project data lives in [`web/lib/projects.ts`](../web/lib/projects.ts)
 instead; `getAllProjects()`/`getProjectBySlug()` are the seam that gets
-repointed at this directory once MDX content exists.
+repointed at this directory once MDX content exists. Writing, tutorial,
+and labs entries live in [`web/lib/platform.ts`](../web/lib/platform.ts)
+the same way (`posts` is empty until the first post ships).

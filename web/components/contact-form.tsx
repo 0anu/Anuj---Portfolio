@@ -1,10 +1,14 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { ArrowRight, Check } from "@/components/ui/icons";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
 const endpoint = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT;
+
+const fieldClasses =
+  "mt-2 w-full rounded-xl border border-border-strong bg-bg-subtle px-4 py-3 text-body text-fg-strong placeholder:text-fg-subtle outline-none transition-[border-color,box-shadow] duration-200 hover:border-[oklch(100%_0_0/24%)] focus:border-accent focus:shadow-[0_0_0_4px_oklch(83%_0.13_200/15%)]";
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -44,37 +48,49 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <p className="rounded-md border border-success/40 bg-bg px-5 py-4 text-body text-fg">
-        Thanks — that&apos;s sent. I&apos;ll get back to you.
-      </p>
+      <div
+        role="status"
+        className="flex items-start gap-3 rounded-xl border border-[oklch(78%_0.15_152/35%)] bg-bg-subtle px-5 py-4"
+      >
+        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[oklch(78%_0.15_152/15%)] text-success">
+          <Check />
+        </span>
+        <p className="text-body text-fg">Thanks — that&apos;s sent. I&apos;ll get back to you.</p>
+      </div>
     );
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div>
-        <label htmlFor="name" className="block text-caption font-medium text-fg">
-          Name
-        </label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          required
-          className="mt-2 w-full rounded-md border border-border-strong bg-surface px-3.5 py-2.5 text-body text-fg outline-none focus:border-accent-text"
-        />
-      </div>
-      <div>
-        <label htmlFor="email" className="block text-caption font-medium text-fg">
-          Email
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          className="mt-2 w-full rounded-md border border-border-strong bg-surface px-3.5 py-2.5 text-body text-fg outline-none focus:border-accent-text"
-        />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="name" className="block text-caption font-medium text-fg">
+            Name
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            autoComplete="name"
+            placeholder="Your name"
+            required
+            className={fieldClasses}
+          />
+        </div>
+        <div>
+          <label htmlFor="email" className="block text-caption font-medium text-fg">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@company.com"
+            required
+            className={fieldClasses}
+          />
+        </div>
       </div>
       <div>
         <label htmlFor="message" className="block text-caption font-medium text-fg">
@@ -84,21 +100,27 @@ export function ContactForm() {
           id="message"
           name="message"
           required
-          rows={5}
-          className="mt-2 w-full rounded-md border border-border-strong bg-surface px-3.5 py-2.5 text-body text-fg outline-none focus:border-accent-text"
+          rows={6}
+          placeholder="What are you building?"
+          className={`${fieldClasses} resize-y`}
         />
       </div>
 
-      {status === "error" && errorMessage ? (
-        <p className="text-caption text-error">{errorMessage}</p>
-      ) : null}
+      <div aria-live="polite">
+        {status === "error" && errorMessage ? (
+          <p className="text-caption text-error">{errorMessage}</p>
+        ) : null}
+      </div>
 
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="w-full rounded-md bg-accent px-5 py-3 text-caption font-medium text-accent-contrast transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="group inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-6 text-body font-medium text-accent-contrast shadow-[0_0_0_1px_oklch(83%_0.13_200/40%),0_8px_24px_-10px_oklch(83%_0.13_200/70%)] transition-[box-shadow,opacity] duration-200 hover:shadow-[0_0_0_1px_oklch(83%_0.13_200/60%),0_10px_36px_-8px_oklch(83%_0.13_200/80%)] disabled:cursor-wait disabled:opacity-60"
       >
         {status === "submitting" ? "Sending…" : "Send message"}
+        {status !== "submitting" ? (
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+        ) : null}
       </button>
     </form>
   );

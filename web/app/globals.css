@@ -1,37 +1,43 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------- */
-/* Design tokens — dark base, OKLCH. Spans ≥20 lightness points across    */
-/* bg-deep → surface-raised so cards/panels/sections stay distinguishable. */
+/* Design tokens — dark base, OKLCH, blue-black hue 262.                  */
+/* Surfaces step ~3–5 lightness points apart so cards, panels, and        */
+/* sections stay distinguishable without heavy borders. Token *names* are */
+/* load-bearing: scripts/check-contrast.mjs resolves them from build CSS. */
 /* ---------------------------------------------------------------------- */
 :root {
   /* Surfaces — dark scale */
-  --bg-deep: oklch(13% 0.012 252);
-  --bg: oklch(17.5% 0.014 252);
-  --bg-subtle: oklch(22% 0.016 252);
-  --surface: oklch(26.5% 0.018 250);
-  --surface-raised: oklch(33% 0.02 250);
-  --surface-inverse: oklch(96.5% 0.004 250);
+  --bg-deep: oklch(13% 0.014 262);
+  --bg: oklch(15.5% 0.016 262);
+  --bg-subtle: oklch(18.5% 0.018 262);
+  --surface: oklch(20.5% 0.019 262);
+  --surface-raised: oklch(25% 0.021 262);
+  --surface-inverse: oklch(96.5% 0.004 262);
 
   /* Foreground — on dark surfaces */
-  --fg-strong: oklch(98% 0.004 250);
-  --fg: oklch(93% 0.007 250);
-  --fg-muted: oklch(74% 0.013 250);
-  --fg-subtle: oklch(61% 0.014 250);
+  --fg-strong: oklch(98.5% 0.003 262);
+  --fg: oklch(91% 0.008 262);
+  --fg-muted: oklch(73% 0.016 262);
+  --fg-subtle: oklch(62% 0.017 262);
 
-  /* Accent — cyan */
-  --accent: oklch(80% 0.12 190);
-  --accent-text: oklch(84% 0.11 190);
-  --accent-contrast: oklch(18% 0.03 195);
-  --accent-on-inverse: oklch(48% 0.11 195);
+  /* Accent — signal cyan (primary, carries text + buttons) */
+  --accent: oklch(83% 0.13 200);
+  --accent-text: oklch(85% 0.115 200);
+  --accent-contrast: oklch(17% 0.035 210);
+  --accent-on-inverse: oklch(48% 0.11 205);
 
-  /* Borders — on dark surfaces */
-  --border: oklch(33% 0.018 250 / 40%);
-  --border-strong: oklch(45% 0.02 250 / 55%);
+  /* Accent 2 — violet, decorative only (gradients, glows, AI tone) */
+  --accent-2: oklch(70% 0.17 292);
+  --accent-2-text: oklch(80% 0.12 292);
+
+  /* Borders — hairlines on dark surfaces */
+  --border: oklch(100% 0 0 / 8%);
+  --border-strong: oklch(100% 0 0 / 15%);
 
   /* Status — tuned for legibility on dark surfaces */
-  --success: oklch(76% 0.15 148);
-  --warning: oklch(81% 0.15 82);
+  --success: oklch(78% 0.15 152);
+  --warning: oklch(82% 0.14 82);
   --error: oklch(72% 0.19 25);
   --info: var(--accent);
 
@@ -42,7 +48,21 @@
   --info-on-inverse: var(--accent-on-inverse);
 
   --surface-lift: oklch(100% 0 0 / 6%);
-  --grain-opacity: 0.03;
+  --grain-opacity: 0.035;
+
+  /* Elevation */
+  --shadow-card: 0 1px 0 0 oklch(100% 0 0 / 4%) inset, 0 1px 2px oklch(0% 0 0 / 30%);
+  --shadow-lift:
+    0 1px 0 0 oklch(100% 0 0 / 6%) inset, 0 18px 48px -18px oklch(0% 0 0 / 70%),
+    0 0 0 1px oklch(100% 0 0 / 4%);
+  --glow-accent: 0 0 0 1px oklch(83% 0.13 200 / 35%), 0 8px 32px -8px oklch(83% 0.13 200 / 45%);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 160ms;
+  --dur: 280ms;
+
+  --header-h: 4rem;
 }
 
 /* ------------------------------------------------------------------ */
@@ -51,27 +71,27 @@
 /* so cards/buttons/prose/forms inside become correct automatically.  */
 /* ------------------------------------------------------------------ */
 .panel-inverse {
-  --bg-deep: oklch(93% 0.006 250);
+  --bg-deep: oklch(93% 0.006 262);
   --bg: var(--surface-inverse);
-  --bg-subtle: oklch(94% 0.005 250);
-  --surface: oklch(99% 0.002 250);
+  --bg-subtle: oklch(94% 0.005 262);
+  --surface: oklch(99% 0.002 262);
   --surface-raised: oklch(100% 0 0);
   /* --surface-inverse intentionally not redefined here: it's the "light
      panel" token, and --bg above still needs *its* (unredefined, light)
      value — redefining it in this same scope would make --bg resolve to
      whatever --surface-inverse becomes, i.e. itself. */
 
-  --fg-strong: oklch(15% 0.01 255);
-  --fg: oklch(24% 0.014 253);
-  --fg-muted: oklch(42% 0.018 253);
-  --fg-subtle: oklch(53% 0.016 253);
+  --fg-strong: oklch(15% 0.01 262);
+  --fg: oklch(24% 0.014 262);
+  --fg-muted: oklch(42% 0.018 262);
+  --fg-subtle: oklch(53% 0.016 262);
 
   --accent-text: var(--accent-on-inverse);
   /* --accent-contrast intentionally not redefined: --accent itself keeps the
      same lightness in both contexts, so the dark text that reads on it does too. */
 
-  --border: oklch(70% 0.012 250 / 60%);
-  --border-strong: oklch(55% 0.016 250 / 55%);
+  --border: oklch(70% 0.012 262 / 60%);
+  --border-strong: oklch(55% 0.016 262 / 55%);
 
   --success: var(--success-on-inverse);
   --warning: var(--warning-on-inverse);
@@ -105,6 +125,8 @@
   --color-accent-text: var(--accent-text);
   --color-accent-contrast: var(--accent-contrast);
   --color-accent-on-inverse: var(--accent-on-inverse);
+  --color-accent-2: var(--accent-2);
+  --color-accent-2-text: var(--accent-2-text);
 
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
@@ -114,55 +136,110 @@
   --color-error: var(--error);
   --color-info: var(--info);
 
-  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", monospace;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
 
   /* Named type scale (not text-xl) */
-  --text-display: clamp(2.75rem, 2.1rem + 3.2vw, 5rem);
-  --text-display--line-height: 1.04;
-  --text-display--letter-spacing: -0.038em;
+  --text-display: clamp(2.6rem, 1.8rem + 3.2vw, 4.25rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.045em;
   --text-display--font-weight: 600;
 
-  --text-h1: clamp(2.1rem, 1.8rem + 1.5vw, 3.25rem);
-  --text-h1--line-height: 1.08;
-  --text-h1--letter-spacing: -0.03em;
+  --text-h1: clamp(2.2rem, 1.7rem + 2.2vw, 3.75rem);
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.04em;
   --text-h1--font-weight: 600;
 
-  --text-h2: clamp(1.6rem, 1.4rem + 1vw, 2.25rem);
-  --text-h2--line-height: 1.14;
-  --text-h2--letter-spacing: -0.022em;
+  --text-h2: clamp(1.75rem, 1.45rem + 1.3vw, 2.625rem);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.032em;
   --text-h2--font-weight: 600;
 
-  --text-h3: 1.375rem;
+  --text-h3: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
   --text-h3--line-height: 1.25;
-  --text-h3--letter-spacing: -0.015em;
+  --text-h3--letter-spacing: -0.022em;
   --text-h3--font-weight: 600;
 
   --text-h4: 1.125rem;
   --text-h4--line-height: 1.35;
-  --text-h4--letter-spacing: -0.011em;
+  --text-h4--letter-spacing: -0.014em;
   --text-h4--font-weight: 600;
 
   --text-prose: 1.1875rem;
   --text-prose--line-height: 1.7;
-  --text-prose--letter-spacing: -0.008em;
+  --text-prose--letter-spacing: -0.01em;
 
-  --text-body-lg: 1.125rem;
-  --text-body-lg--line-height: 1.55;
-  --text-body-lg--letter-spacing: -0.009em;
+  --text-body-lg: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --text-body-lg--line-height: 1.6;
+  --text-body-lg--letter-spacing: -0.011em;
 
   --text-body: 1rem;
-  --text-body--line-height: 1.55;
-  --text-body--letter-spacing: -0.006em;
+  --text-body--line-height: 1.6;
+  --text-body--letter-spacing: -0.008em;
 
   --text-caption: 0.875rem;
-  --text-caption--line-height: 1.45;
+  --text-caption--line-height: 1.5;
   --text-caption--letter-spacing: -0.006em;
 
   --text-label: 0.75rem;
   --text-label--line-height: 1.3;
-  --text-label--letter-spacing: -0.006em;
+  --text-label--letter-spacing: 0em;
+
+  --animate-rise: rise 0.8s var(--ease-out) both;
+  --animate-fade: fade 1.2s var(--ease-out) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes flow {
+  to {
+    stroke-dashoffset: -240;
+  }
+}
+
+@keyframes pulse-ring {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, -4%, 0) scale(1.06);
+  }
+}
+
+@keyframes gradient-pan {
+  to {
+    background-position: 200% center;
+  }
 }
 
 @layer base {
@@ -172,16 +249,20 @@
 
   html {
     color-scheme: dark;
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + 1.5rem);
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
     background: var(--bg-deep);
     color: var(--fg);
     font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
     position: relative;
   }
 
-  /* ~3% film grain — flat dark areas band badly without it */
+  /* Film grain — flat dark areas band badly without it */
   body::after {
     content: "";
     position: fixed;
@@ -199,6 +280,12 @@
     color: var(--accent-contrast);
   }
 
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
   h1,
   h2,
   h3,
@@ -208,6 +295,159 @@
 
   p {
     text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Eyebrow label above headings */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.25rem;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  /* Base card — hairline border, faint top highlight */
+  .card {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: linear-gradient(180deg, oklch(100% 0 0 / 2.5%), transparent 40%), var(--surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  /*
+   * Interactive card — lifts on hover and fades in a gradient border drawn
+   * by a masked ::before, since border gradients can't be transitioned.
+   */
+  .card-interactive {
+    transition:
+      transform var(--dur) var(--ease-out),
+      box-shadow var(--dur) var(--ease-out),
+      background-color var(--dur) var(--ease-out);
+  }
+  .card-interactive::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      oklch(83% 0.13 var(--tone-h, 200) / 80%),
+      oklch(70% 0.17 292 / 45%) 45%,
+      transparent 75%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--dur) var(--ease-out);
+    pointer-events: none;
+  }
+  .card-interactive:hover,
+  .card-interactive:focus-within {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
+  }
+  .card-interactive:hover::before,
+  .card-interactive:focus-within::before {
+    opacity: 1;
+  }
+
+  /* Glassy chrome for sticky header and floating panels */
+  .glass {
+    background: oklch(13% 0.014 262 / 72%);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    backdrop-filter: blur(16px) saturate(1.4);
+  }
+
+  /* Tech chip */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: oklch(100% 0 0 / 3%);
+    padding: 0.25rem 0.625rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    line-height: 1.3;
+    color: var(--fg-muted);
+    white-space: nowrap;
+  }
+
+  /* Gradient text for a single emphasized phrase */
+  .text-gradient {
+    background: linear-gradient(
+      100deg,
+      var(--accent-text) 0%,
+      var(--accent-2-text) 50%,
+      var(--accent-text) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .text-gradient {
+      animation: gradient-pan 8s linear infinite;
+    }
+  }
+
+  /* Page-level ambient backdrop: grid fading out + two soft blooms */
+  .backdrop-grid {
+    background-image:
+      linear-gradient(to right, oklch(100% 0 0 / 5%) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(100% 0 0 / 5%) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 10%, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 10%, transparent 75%);
+  }
+  .bloom {
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .bloom {
+      animation: drift 18s ease-in-out infinite;
+    }
+  }
+
+  .divider-fade {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
   }
 }
 
@@ -220,18 +460,52 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .bg-grid {
-    background-image:
-      linear-gradient(to right, var(--border) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-    background-size: 56px 56px;
-    -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 0%, black 0%, transparent 72%);
-    mask-image: radial-gradient(ellipse 60% 55% at 50% 0%, black 0%, transparent 72%);
+  /* Per-item accent hue, set via style={{ "--tone-h": 290 }} */
+  .tone-text {
+    color: oklch(84% 0.11 var(--tone-h, 200));
+  }
+  .tone-bg {
+    background-color: oklch(83% 0.13 var(--tone-h, 200) / 12%);
+  }
+  .tone-border {
+    border-color: oklch(83% 0.13 var(--tone-h, 200) / 35%);
+  }
+  .tone-glow {
+    background: radial-gradient(
+      ellipse 60% 70% at 50% 0%,
+      oklch(80% 0.14 var(--tone-h, 200) / 22%),
+      transparent 70%
+    );
   }
 
-  .bg-bloom {
-    background:
-      radial-gradient(ellipse 46% 40% at 78% 8%, oklch(80% 0.12 190 / 16%), transparent 60%),
-      radial-gradient(ellipse 38% 34% at 12% 0%, oklch(80% 0.12 190 / 8%), transparent 55%);
+  /* Scroll-linked section reveal — pure CSS, no JS. Browsers without
+     scroll-driven animations (or with reduced motion) show content as-is. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 55%;
+      }
+    }
+  }
+
+  /* Pipeline flow lines in diagrams — a moving packet along a static rail */
+  .flow-packet {
+    stroke-dasharray: 10 230;
+    stroke-dashoffset: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .flow-packet {
+      animation: flow 3.2s linear infinite;
+    }
+    .pulse {
+      animation: pulse-ring 3s ease-in-out infinite;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flow-packet {
+      opacity: 0;
+    }
   }
 }
