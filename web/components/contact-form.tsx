@@ -32,7 +32,9 @@ export function ContactForm() {
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        // Accept makes form services (e.g. Formspree) reply with JSON rather
+        // than redirecting; the Lambda ignores it.
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(data),
       });
 
