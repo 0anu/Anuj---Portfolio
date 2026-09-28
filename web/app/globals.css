@@ -1,25 +1,25 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------- */
-/* Design tokens — dark base, OKLCH, blue-black hue 262.                  */
+/* Design tokens — dark base, OKLCH, midnight-navy hue 264.              */
 /* Surfaces step ~3–5 lightness points apart so cards, panels, and        */
 /* sections stay distinguishable without heavy borders. Token *names* are */
 /* load-bearing: scripts/check-contrast.mjs resolves them from build CSS. */
 /* ---------------------------------------------------------------------- */
 :root {
   /* Surfaces — dark scale */
-  --bg-deep: oklch(13% 0.014 262);
-  --bg: oklch(15.5% 0.016 262);
-  --bg-subtle: oklch(18.5% 0.018 262);
-  --surface: oklch(20.5% 0.019 262);
-  --surface-raised: oklch(25% 0.021 262);
+  --bg-deep: oklch(21.5% 0.03 264);
+  --bg: oklch(24% 0.032 264);
+  --bg-subtle: oklch(27% 0.034 264);
+  --surface: oklch(29% 0.035 264);
+  --surface-raised: oklch(33.5% 0.036 264);
   --surface-inverse: oklch(97.5% 0.007 270);
 
   /* Foreground — on dark surfaces */
   --fg-strong: oklch(98.5% 0.003 262);
   --fg: oklch(91% 0.008 262);
-  --fg-muted: oklch(73% 0.016 262);
-  --fg-subtle: oklch(62% 0.017 262);
+  --fg-muted: oklch(79% 0.02 264);
+  --fg-subtle: oklch(69% 0.022 264);
 
   /* Accent — signal cyan (primary, carries text + buttons) */
   --accent: oklch(83% 0.13 200);
@@ -32,8 +32,8 @@
   --accent-2-text: oklch(80% 0.12 292);
 
   /* Borders — hairlines on dark surfaces */
-  --border: oklch(100% 0 0 / 8%);
-  --border-strong: oklch(100% 0 0 / 15%);
+  --border: oklch(100% 0 0 / 10%);
+  --border-strong: oklch(100% 0 0 / 18%);
 
   /* Status — tuned for legibility on dark surfaces */
   --success: oklch(78% 0.15 152);
@@ -422,7 +422,7 @@
 
   /* Glassy chrome for sticky header and floating panels */
   .glass {
-    background: oklch(13% 0.014 262 / 88%);
+    background: color-mix(in oklch, var(--bg-deep) 88%, transparent);
     -webkit-backdrop-filter: blur(16px) saturate(1.4);
     backdrop-filter: blur(16px) saturate(1.4);
   }

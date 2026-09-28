@@ -80,7 +80,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             ) : null}
           </div>
 
-          <dl className="mt-12 grid animate-rise grid-cols-2 overflow-hidden rounded-2xl border border-border bg-[oklch(15.5%_0.016_262/70%)] backdrop-blur md:grid-cols-4 [animation-delay:240ms]">
+          <dl className="mt-12 grid animate-rise grid-cols-2 overflow-hidden rounded-2xl border border-border bg-bg/70 backdrop-blur md:grid-cols-4 [animation-delay:240ms]">
             {spec.map((item, i) => (
               <div
                 key={item.label}
