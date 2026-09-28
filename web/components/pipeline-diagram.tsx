@@ -21,7 +21,7 @@ export function PipelineDiagram({ steps, label }: { steps: string[]; label?: str
           return (
             <li key={`${step}-${index}`} className="flex flex-col md:flex-row md:items-center">
               <div
-                className={`flex items-center gap-3 rounded-xl border bg-surface px-3.5 py-2.5 shadow-[0_1px_0_0_oklch(100%_0_0/5%)_inset] ${
+                className={`flex items-center gap-3 rounded-xl border bg-surface px-3.5 py-2.5 shadow-[0_1px_0_0_var(--card-sheen)_inset] ${
                   last ? "border-[oklch(83%_0.13_200/45%)]" : "border-border-strong"
                 }`}
               >

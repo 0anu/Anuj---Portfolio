@@ -84,6 +84,8 @@ export interface FocusArea {
   description: string;
   icon: FocusIcon;
   tools: string[];
+  /** OKLCH hue for the card's icon tile and hover border. */
+  hue: number;
 }
 
 /** Areas of expertise, grounded in the capability groups and project work above. */
@@ -93,6 +95,7 @@ export const focusAreas: FocusArea[] = [
     description:
       "Event-driven ingestion, ETL and reverse ETL, and data models built for the systems downstream of them.",
     icon: "pipeline",
+    hue: 200,
     tools: ["Python", "SQL", "Spark", "Pandas"],
   },
   {
@@ -100,6 +103,7 @@ export const focusAreas: FocusArea[] = [
     description:
       "Serverless and managed services on AWS and GCP — queues to decouple, functions to scale, warehouses to land in.",
     icon: "cloud",
+    hue: 240,
     tools: ["Lambda", "SQS", "S3", "BigQuery", "Cloud Run"],
   },
   {
@@ -107,6 +111,7 @@ export const focusAreas: FocusArea[] = [
     description:
       "Stateful LangGraph agents with tool calling and multi-step reasoning that stays attributable to its sources.",
     icon: "agent",
+    hue: 292,
     tools: ["LangGraph", "Tool calling", "Multi-agent"],
   },
   {
@@ -114,6 +119,7 @@ export const focusAreas: FocusArea[] = [
     description:
       "Retrieval, prompt engineering, and tool integration layered on top of the data that already exists.",
     icon: "sparkles",
+    hue: 330,
     tools: ["LangChain", "RAG", "Prompting"],
   },
   {
@@ -121,6 +127,7 @@ export const focusAreas: FocusArea[] = [
     description:
       "REST integrations and sync services between SaaS platforms and internal systems, idempotent by design.",
     icon: "server",
+    hue: 160,
     tools: ["REST APIs", "MySQL", "PostgreSQL"],
   },
   {
@@ -128,6 +135,7 @@ export const focusAreas: FocusArea[] = [
     description:
       "Segmentation models fine-tuned with LoRA and tuned with Optuna, feeding downstream agent chains.",
     icon: "eye",
+    hue: 70,
     tools: ["PyTorch", "YOLO", "LoRA", "Optuna"],
   },
 ];

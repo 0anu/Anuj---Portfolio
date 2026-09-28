@@ -45,11 +45,22 @@ interface SectionProps {
   className?: string;
   /** aria-labelledby target; pass the SectionHeader id. */
   labelledBy?: string;
+  /**
+   * "light" renders the section as a rounded light sheet inset into the dark
+   * page (.panel-inverse flips every token inside, so children need no
+   * changes).
+   */
+  tone?: "dark" | "light";
 }
 
-export function Section({ children, id, className = "", labelledBy }: SectionProps) {
+export function Section({ children, id, className = "", labelledBy, tone = "dark" }: SectionProps) {
+  const toneClasses = tone === "light" ? "panel-inverse sheet my-4 sm:my-6" : "";
   return (
-    <section id={id} aria-labelledby={labelledBy} className={`py-20 md:py-28 ${className}`}>
+    <section
+      id={id}
+      aria-labelledby={labelledBy}
+      className={`py-20 md:py-28 ${toneClasses} ${className}`}
+    >
       <Container>{children}</Container>
     </section>
   );

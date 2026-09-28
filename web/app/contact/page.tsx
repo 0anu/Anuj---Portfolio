@@ -73,7 +73,7 @@ export default function ContactPage() {
         </div>
 
         <div className="animate-rise [animation-delay:160ms]">
-          <div className="card p-6 shadow-[var(--shadow-lift)] sm:p-8">
+          <div className="panel-inverse card p-6 shadow-[0_40px_100px_-40px_oklch(70%_0.14_240/55%)] sm:p-8">
             <h2 className="text-h4 text-fg-strong">Send a message</h2>
             <p className="mt-1 mb-7 text-caption text-fg-muted">All fields are required.</p>
             <ContactForm />

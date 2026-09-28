@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { getFeaturedProjects } from "@/lib/projects";
 import { person, siteUrl, socialLinks } from "@/lib/site";
@@ -12,12 +13,13 @@ import { Trajectory } from "@/components/sections/trajectory";
 import { TechEcosystem } from "@/components/sections/tech-ecosystem";
 import { PlatformGrid } from "@/components/sections/platform-grid";
 import { ContactCta } from "@/components/sections/contact-cta";
+import { TechMarquee } from "@/components/sections/tech-marquee";
 
 const glance = [
-  { label: "Role", value: person.role },
-  { label: "Focus", value: "Event-driven pipelines · Agentic AI" },
-  { label: "Cloud", value: "AWS · GCP" },
-  { label: "Building", value: "AI Labs on this site" },
+  { label: "Role", value: person.role, hue: 200 },
+  { label: "Focus", value: "Event-driven pipelines · Agentic AI", hue: 292 },
+  { label: "Cloud", value: "AWS · GCP", hue: 240 },
+  { label: "Building", value: "AI Labs on this site", hue: 70 },
 ];
 
 export default function HomePage() {
@@ -51,10 +53,14 @@ export default function HomePage() {
           className="bloom -top-40 left-[-10%] h-[26rem] w-[36rem] bg-[oklch(83%_0.13_200/13%)] [animation-delay:-9s]"
           aria-hidden="true"
         />
+        <div
+          className="bloom right-[30%] bottom-[-12rem] h-80 w-[30rem] bg-[oklch(78%_0.14_40/9%)] [animation-delay:-4s]"
+          aria-hidden="true"
+        />
 
         <Container className="relative grid items-center gap-14 pt-14 pb-20 md:pt-20 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-12 lg:pt-20 lg:pb-24">
           <div>
-            <p className="inline-flex animate-rise items-center gap-2.5 rounded-full border border-border-strong bg-[oklch(100%_0_0/3%)] py-1 pr-3.5 pl-1.5 text-caption text-fg-muted">
+            <p className="inline-flex animate-rise items-center gap-2.5 rounded-full border border-border-strong bg-tint py-1 pr-3.5 pl-1.5 text-caption text-fg-muted">
               <span className="rounded-full bg-[oklch(83%_0.13_200/15%)] px-2 py-0.5 font-mono text-label text-accent-text">
                 {person.role}
               </span>
@@ -124,13 +130,19 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* ----------------------------------------------------------- About */}
-      <Section id="about" labelledBy="about-title" className="border-t border-border">
+      <TechMarquee />
+
+      {/* ------------------------------------ About + Expertise (light sheet) */}
+      <Section id="about" labelledBy="about-title" tone="light">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-20">
           <div className="reveal">
             <p className="eyebrow">About</p>
             <h2 id="about-title" className="mt-5 text-h2 text-fg-strong">
-              I treat agents as another kind of pipeline —{" "}
+              I treat agents as another kind of{" "}
+              <span className="font-serif font-normal tracking-[-0.01em] italic">
+                <span className="text-gradient">pipeline</span>
+              </span>{" "}
+              —{" "}
               <span className="text-fg-subtle">
                 one that reasons at each step instead of just transforming.
               </span>
@@ -152,57 +164,71 @@ export default function HomePage() {
 
           <dl className="reveal card self-start divide-y divide-border p-2">
             {glance.map((item) => (
-              <div key={item.label} className="flex items-baseline justify-between gap-6 px-4 py-4">
-                <dt className="font-mono text-label uppercase tracking-[0.12em] text-fg-subtle">
+              <div
+                key={item.label}
+                className="flex items-baseline justify-between gap-6 px-4 py-4"
+                style={{ "--tone-h": item.hue } as CSSProperties}
+              >
+                <dt className="flex items-center gap-2.5 font-mono text-label uppercase tracking-[0.12em] text-fg-subtle">
+                  <span
+                    className="h-2 w-2 rounded-full"
+                    style={{ background: `oklch(72% 0.15 ${item.hue})` }}
+                    aria-hidden="true"
+                  />
                   {item.label}
                 </dt>
-                <dd className="text-right text-caption text-fg-strong">{item.value}</dd>
+                <dd className="text-right text-caption font-medium text-fg-strong">{item.value}</dd>
               </div>
             ))}
           </dl>
         </div>
-      </Section>
 
-      {/* ------------------------------------------------------- Expertise */}
-      <Section id="expertise" labelledBy="expertise-title" className="bg-bg">
-        <SectionHeader
-          id="expertise-title"
-          eyebrow="Expertise"
-          title="Where I work, from ingestion to reasoning"
-          description="Six areas that show up across the projects — the data layer first, and the AI layer built on top of it."
-        />
-        <FocusGrid />
-      </Section>
-
-      {/* -------------------------------------------------------- Projects */}
-      <Section id="projects" labelledBy="projects-title">
-        <SectionHeader
-          id="projects-title"
-          eyebrow="Selected work"
-          title="Projects"
-          description="Real pipelines and agent systems, each written up with its architecture and the engineering concerns that shaped it."
-          action={
-            <ButtonLink href="/projects" variant="secondary">
-              All projects
-              <ArrowRight className="h-4 w-4" />
-            </ButtonLink>
-          }
-        />
-        <div className="space-y-5 md:space-y-6">
-          {featured.map((project, i) => (
-            <div key={project.slug} className="reveal">
-              <ProjectCard project={project} variant="feature" index={i} />
-            </div>
-          ))}
+        <div className="mt-24 md:mt-32">
+          <SectionHeader
+            id="expertise-title"
+            eyebrow="Expertise"
+            title="Where I work, from ingestion to reasoning"
+            description="Six areas that show up across the projects — the data layer first, and the AI layer built on top of it."
+          />
+          <FocusGrid />
         </div>
       </Section>
 
-      {/* ------------------------------------------------------ Experience */}
-      <Section
-        id="experience"
-        labelledBy="experience-title"
-        className="border-y border-border bg-bg"
-      >
+      {/* ------------------------------------------------- Projects (dark) */}
+      <Section id="projects" labelledBy="projects-title" className="relative overflow-hidden">
+        <div
+          className="bloom top-40 -left-40 h-96 w-96 bg-[oklch(83%_0.13_200/10%)]"
+          aria-hidden="true"
+        />
+        <div
+          className="bloom right-[-10rem] bottom-40 h-96 w-96 bg-[oklch(70%_0.17_292/12%)] [animation-delay:-6s]"
+          aria-hidden="true"
+        />
+        <div className="relative">
+          <SectionHeader
+            id="projects-title"
+            eyebrow="Selected work"
+            title="Projects"
+            description="Real pipelines and agent systems, each written up with its architecture and the engineering concerns that shaped it."
+            action={
+              <ButtonLink href="/projects" variant="secondary">
+                All projects
+                <ArrowRight className="h-4 w-4" />
+              </ButtonLink>
+            }
+          />
+          <div className="space-y-5 md:space-y-6">
+            {featured.map((project, i) => (
+              <div key={project.slug} className="reveal">
+                <ProjectCard project={project} variant="feature" index={i} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* ------------------------------- Experience + Stack (light sheet) */}
+      <Section id="experience" labelledBy="experience-title" tone="light">
         <SectionHeader
           id="experience-title"
           eyebrow="Experience"
@@ -216,21 +242,20 @@ export default function HomePage() {
           }
         />
         <Trajectory showTools={false} />
+
+        <div id="stack" className="mt-24 md:mt-32">
+          <SectionHeader
+            id="stack-title"
+            eyebrow="Technology"
+            title="The ecosystem I build with"
+            description="Languages, cloud services, and AI tooling in regular use across data and agent work."
+          />
+          <TechEcosystem />
+        </div>
       </Section>
 
-      {/* ------------------------------------------------------ Tech stack */}
-      <Section id="stack" labelledBy="stack-title">
-        <SectionHeader
-          id="stack-title"
-          eyebrow="Technology"
-          title="The ecosystem I build with"
-          description="Languages, cloud services, and AI tooling in regular use across data and agent work."
-        />
-        <TechEcosystem />
-      </Section>
-
-      {/* -------------------------------------------------------- Platform */}
-      <Section id="platform" labelledBy="platform-title" className="border-t border-border">
+      {/* ------------------------------------------------- Platform (dark) */}
+      <Section id="platform" labelledBy="platform-title">
         <SectionHeader
           id="platform-title"
           eyebrow="Beyond the portfolio"

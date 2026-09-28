@@ -14,7 +14,7 @@ export function ContactCta({
   return (
     <section aria-labelledby="cta-title" className="py-20 md:py-28">
       <Container>
-        <div className="reveal relative overflow-hidden rounded-3xl border border-border-strong bg-surface px-6 py-14 text-center sm:px-10 md:py-20">
+        <div className="reveal panel-inverse sheet !mx-0 border border-border px-6 py-14 text-center sm:px-10 md:py-20">
           <div className="backdrop-grid absolute inset-0" aria-hidden="true" />
           <div
             className="bloom -bottom-24 left-1/4 h-64 w-96 bg-[oklch(83%_0.13_200/20%)]"
@@ -31,7 +31,7 @@ export function ContactCta({
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-body-lg text-fg-muted">{description}</p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-              <ButtonLink href={contactLink.href} size="lg">
+              <ButtonLink href={contactLink.href} variant="contrast" size="lg">
                 Get in touch
                 <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-0.5" />
               </ButtonLink>

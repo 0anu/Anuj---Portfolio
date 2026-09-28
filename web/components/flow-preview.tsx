@@ -12,7 +12,7 @@ export function FlowPreview({ steps, max = 5 }: { steps: string[]; max?: number 
       {shown.map((step, i) => (
         <li key={`${step}-${i}`} className="flex flex-col items-start">
           <div
-            className="flex items-center gap-2.5 rounded-lg border border-border-strong bg-[oklch(20.5%_0.019_262/85%)] px-3 py-1.5 shadow-[0_1px_0_0_oklch(100%_0_0/5%)_inset] transition-transform duration-300 group-hover:translate-x-1"
+            className="flex items-center gap-2.5 rounded-lg border border-border-strong bg-surface/90 px-3 py-1.5 shadow-[0_1px_0_0_var(--card-sheen)_inset] transition-transform duration-300 group-hover:translate-x-1"
             style={{ marginLeft: `${i * 6}%`, transitionDelay: `${i * 40}ms` }}
           >
             <span

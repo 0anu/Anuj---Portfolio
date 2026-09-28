@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "ghost" | "contrast";
 type Size = "md" | "lg";
 
 const base =
@@ -11,8 +11,11 @@ const variants: Record<Variant, string> = {
   primary:
     "bg-accent text-accent-contrast shadow-[0_0_0_1px_oklch(83%_0.13_200/40%),0_8px_24px_-10px_oklch(83%_0.13_200/70%)] hover:shadow-[0_0_0_1px_oklch(83%_0.13_200/60%),0_10px_36px_-8px_oklch(83%_0.13_200/80%)] hover:brightness-105",
   secondary:
-    "border border-border-strong bg-[oklch(100%_0_0/4%)] text-fg-strong hover:border-[oklch(100%_0_0/28%)] hover:bg-[oklch(100%_0_0/8%)]",
-  ghost: "text-fg-muted hover:text-fg-strong hover:bg-[oklch(100%_0_0/6%)]",
+    "border border-border-strong bg-tint text-fg-strong hover:border-tint-border hover:bg-tint-strong",
+  ghost: "text-fg-muted hover:text-fg-strong hover:bg-tint-strong",
+  /* Inverts the surrounding surface: near-black on light sheets, white on dark. */
+  contrast:
+    "bg-fg-strong text-bg shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lift)] hover:-translate-y-px",
 };
 
 const sizes: Record<Size, string> = {
